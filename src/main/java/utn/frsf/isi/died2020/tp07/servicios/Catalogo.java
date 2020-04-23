@@ -136,6 +136,13 @@ public class Catalogo {
 		switch(criterio) {
 			case CALIFICACION:
 				return (m1,m2) -> m2.getCalificacion().compareTo(m1.getCalificacion());
+			case TITULO:
+				return (m1,m2) -> m1.getTitulo().compareTo(m2.getTitulo());
+			case FECHA_PUBLICACION:
+				return (m1,m2) -> m2.getFechaPublicacion().compareTo(m1.getFechaPublicacion());
+//			case COSTO:
+//				return (m1,m2) -> ((int)m1.costo(user)).compareTo((int)m2.costo(user));
+
 		}
 		return null;
 	}
@@ -144,11 +151,39 @@ public class Catalogo {
 		return this.buscarListaMaterial( m -> m.getCalificacion()>= minimo && m.getCalificacion()<=max, this.getCriterio(CriterioOrdenamiento.CALIFICACION));
 	}
 	
-	public static void main(String[] args) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		System.out.println(LocalDate.parse("20-02-2010", formatter).atTime(LocalTime.now()));
-		System.out.println(LocalDate.parse("20-02-2010", formatter).atStartOfDay());
-		
+	public List<Material> busquedaRangoCalificacionOrdCalif(Integer minimo,Integer max, Integer n){
+		return this.buscarListaMaterial( m -> m.getCalificacion()>= minimo && m.getCalificacion()<=max, n, this.getCriterio(CriterioOrdenamiento.CALIFICACION));
 	}
+	
+	public List<Material> busquedaTitulo(String titulo){
+		return this.buscarListaMaterial(m -> m.getTitulo().equalsIgnoreCase(titulo), this.getCriterio(CriterioOrdenamiento.TITULO));
+	}
+	public List<Material> busquedaTitulo(String titulo, Integer n){
+		return this.buscarListaMaterial(m -> m.getTitulo().equalsIgnoreCase(titulo), n, this.getCriterio(CriterioOrdenamiento.TITULO));
+	}
+	
+	public List<Material> busquedaRangoFechaOrdFecha(String primero, String ultimo){
+		LocalDateTime fechaDesde = LocalDate.parse(primero, formatter).atStartOfDay();
+		LocalDateTime fechaHasta = LocalDate.parse(ultimo, formatter).atTime(LocalTime.now());
+		return this.buscarListaMaterial(m -> m.getFechaPublicacion().isAfter(fechaDesde) && m.getFechaPublicacion().isBefore(fechaHasta), this.getCriterio(CriterioOrdenamiento.FECHA_PUBLICACION));
+	}
+	
+	public List<Material> busquedaRangoFechaOrdFecha(String primero, String ultimo, Integer n){
+		LocalDateTime fechaDesde = LocalDate.parse(primero, formatter).atStartOfDay();
+		LocalDateTime fechaHasta = LocalDate.parse(ultimo, formatter).atTime(LocalTime.now());
+		return this.buscarListaMaterial(m -> m.getFechaPublicacion().isAfter(fechaDesde) && m.getFechaPublicacion().isBefore(fechaHasta), n, this.getCriterio(CriterioOrdenamiento.FECHA_PUBLICACION));
+	}
+	
+	public List<Material> busquedaTipoYAutorOrdAutor(String autor, String tipo){
+		return this.buscarListaMaterial(m -> m.getAutor().getNombre().equalsIgnoreCase(autor) && m.getClass().getSimpleName().equalsIgnoreCase(tipo));
+	}
+	
+	
+//	public static void main(String[] args) {
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//		System.out.println(LocalDate.parse("20-02-2010", formatter).atTime(LocalTime.now()));
+//		System.out.println(LocalDate.parse("20-02-2010", formatter).atStartOfDay());
+//		
+//	}
 
 }

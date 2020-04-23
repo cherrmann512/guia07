@@ -40,6 +40,22 @@ public class App {
 		System.out.println("Busco por rango de calificacion ordenada decrecientemente");
 		System.out.println("");
 		cat.busquedaRangoCalificacionOrdCalif(75,88).stream().forEach(System.out::println);
+		
+		
+		System.out.println("=============================================");
+		System.out.println("Busco por Titulo");
+		System.out.println("");
+		cat.busquedaTitulo("Axc Video 1").stream().forEach(System.out::println);
+		
+		System.out.println("=============================================");
+		System.out.println("Busco por Rango de fechas");
+		System.out.println("");
+		cat.busquedaRangoFechaOrdFecha("08-06-2019", "01-01-2020").stream().forEach(System.out::println);
+		
+		System.out.println("=============================================");
+		System.out.println("Busco por Autor y tipo");
+		System.out.println("");
+		cat.busquedaTipoYAutorOrdAutor("martin", "video").stream().forEach(System.out::println);
 
 }
 

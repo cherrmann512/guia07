@@ -32,12 +32,12 @@ public class Video  extends Material {
 	
 	@Override
 	public Double costo(Usuario usuario) {
-		return 0.0;
+		return usuario.getCostoVideo().apply(usuario, this);
 	}
 
 	@Override
 	public Boolean puedeAdquirir(Usuario usuario) {
-		return false;
+		return usuario.getPuedeAdquirirVideo().test(usuario);
 	}
 
 }

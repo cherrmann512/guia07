@@ -69,11 +69,11 @@ public class Curso extends Material{
 	
 	@Override
 	public Double costo(Usuario usuario) {
-		return 0.0;
+		return usuario.getCostoCurso().apply(usuario, this);
 	}
 
 	@Override
 	public Boolean puedeAdquirir(Usuario usuario) {
-		return false;
+		return usuario.getPuedeAdquirirCurso().test(usuario);
 	}
 }

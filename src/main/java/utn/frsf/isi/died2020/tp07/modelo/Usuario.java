@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
+import utn.frsf.isi.died2020.tpo7.excepciones.AdquisicionException;
+
 public class Usuario {
 	
 	private Integer id;
@@ -13,9 +15,20 @@ public class Usuario {
 	private String tarjetaCredito;
 	private Double gastos;
 	
-	private List<Adquisicion> adquisiciones;
+	private List<Adquisicion> adquisiciones = new ArrayList<Adquisicion>();
 	
-	public void adquirir(Material material) {
+	private Predicate<Usuario> puedeAdquirirLibro;
+	private Predicate<Usuario> puedeAdquirirVideo;
+	private Predicate<Usuario> puedeAdquirirCurso;
+	
+	private BiFunction<Usuario, Libro, Double> costoLibro;
+	private BiFunction<Usuario, Video, Double> costoVideo;
+	private BiFunction<Usuario, Curso, Double> costoCurso;
+	
+	public void adquirir(Material material) throws AdquisicionException {
+		if(material.puedeAdquirir(this)) {
+			this.adquisiciones.add(new Adquisicion(material, LocalDateTime.now(), material.costo(this)));
+		}else throw new AdquisicionException("no se pudo adquirir el material" + material.getTitulo());
 
 	}
 
@@ -43,5 +56,111 @@ public class Usuario {
 			return false;
 		return true;
 	}
+	
+	private long librosAdquiridos() {
+		return this.adquisiciones.stream().filter(a -> a.getMaterial() instanceof Libro).count();
+	}
+	
+	private long CursosAdquiridos() {
+		return this.adquisiciones.stream().filter(a -> a.getMaterial() instanceof Curso).count();
+	}
+	
+	private int minutosAdquiridos() {
+		return this.adquisiciones.stream()
+				.filter(a -> a.getMaterial() instanceof Video)
+				.map( v -> (Video) v.getMaterial())
+				.mapToInt(v -> v.getDuracion())
+				.sum();
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getCorreoElectronico() {
+		return correoElectronico;
+	}
+
+	public void setCorreoElectronico(String correoElectronico) {
+		this.correoElectronico = correoElectronico;
+	}
+
+	public String getTarjetaCredito() {
+		return tarjetaCredito;
+	}
+
+	public void setTarjetaCredito(String tarjetaCredito) {
+		this.tarjetaCredito = tarjetaCredito;
+	}
+
+	public Double getGastos() {
+		return gastos;
+	}
+
+	public void setGastos(Double gastos) {
+		this.gastos = gastos;
+	}
+
+	public List<Adquisicion> getAdquisiciones() {
+		return adquisiciones;
+	}
+
+	public void setAdquisiciones(List<Adquisicion> adquisiciones) {
+		this.adquisiciones = adquisiciones;
+	}
+
+	public Predicate<Usuario> getPuedeAdquirirLibro() {
+		return puedeAdquirirLibro;
+	}
+
+	public void setPuedeAdquirirLibro(Predicate<Usuario> puedeAdquirirLibro) {
+		this.puedeAdquirirLibro = puedeAdquirirLibro;
+	}
+
+	public Predicate<Usuario> getPuedeAdquirirVideo() {
+		return puedeAdquirirVideo;
+	}
+
+	public void setPuedeAdquirirVideo(Predicate<Usuario> puedeAdquirirVideo) {
+		this.puedeAdquirirVideo = puedeAdquirirVideo;
+	}
+
+	public Predicate<Usuario> getPuedeAdquirirCurso() {
+		return puedeAdquirirCurso;
+	}
+
+	public void setPuedeAdquirirCurso(Predicate<Usuario> puedeAdquirirCurso) {
+		this.puedeAdquirirCurso = puedeAdquirirCurso;
+	}
+
+	public BiFunction<Usuario, Libro, Double> getCostoLibro() {
+		return costoLibro;
+	}
+
+	public void setCostoLibro(BiFunction<Usuario, Libro, Double> costoLibro) {
+		this.costoLibro = costoLibro;
+	}
+
+	public BiFunction<Usuario, Video, Double> getCostoVideo() {
+		return costoVideo;
+	}
+
+	public void setCostoVideo(BiFunction<Usuario, Video, Double> costoVideo) {
+		this.costoVideo = costoVideo;
+	}
+
+	public BiFunction<Usuario, Curso, Double> getCostoCurso() {
+		return costoCurso;
+	}
+
+	public void setCostoCurso(BiFunction<Usuario, Curso, Double> costoCurso) {
+		this.costoCurso = costoCurso;
+	}
+	
+	
 	
 }

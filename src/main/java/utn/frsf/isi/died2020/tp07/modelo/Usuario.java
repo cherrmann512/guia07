@@ -57,15 +57,15 @@ public class Usuario {
 		return true;
 	}
 	
-	private long librosAdquiridos() {
+	public long librosAdquiridos() {
 		return this.adquisiciones.stream().filter(a -> a.getMaterial() instanceof Libro).count();
 	}
 	
-	private long CursosAdquiridos() {
+	public long CursosAdquiridos() {
 		return this.adquisiciones.stream().filter(a -> a.getMaterial() instanceof Curso).count();
 	}
 	
-	private int minutosAdquiridos() {
+	public int minutosAdquiridos() {
 		return this.adquisiciones.stream()
 				.filter(a -> a.getMaterial() instanceof Video)
 				.map( v -> (Video) v.getMaterial())

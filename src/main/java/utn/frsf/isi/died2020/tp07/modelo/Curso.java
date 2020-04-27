@@ -27,7 +27,16 @@ public class Curso extends Material{
 	}
 
 	public Double precio() {
-		return 0.0;
+		double precio = this.precioBase;
+		if(this.clases>10) 
+			precio = precio*1.1;
+		if(this.certificado) 
+			precio = precio*1.1;
+		if(this.nivel == Nivel.AVANZADO)
+			precio = precio*1.1;
+		if(this.nivel == Nivel.EXPERTO)
+			precio = precio*1.2;
+		return precio;
 	}
 
 	public Double getPrecioBase() {

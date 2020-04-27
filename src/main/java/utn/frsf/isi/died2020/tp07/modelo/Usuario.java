@@ -7,6 +7,7 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import utn.frsf.isi.died2020.tpo7.excepciones.AdquisicionException;
+import utn.frsf.isi.died2020.tpo7.excepciones.LimiteMaximoGastoException;
 
 public class Usuario {
 	
@@ -14,6 +15,7 @@ public class Usuario {
 	private String correoElectronico;
 	private String tarjetaCredito;
 	private Double gastos;
+	private Double limite;
 	
 	private List<Adquisicion> adquisiciones = new ArrayList<Adquisicion>();
 	
@@ -25,7 +27,10 @@ public class Usuario {
 	private BiFunction<Usuario, Video, Double> costoVideo;
 	private BiFunction<Usuario, Curso, Double> costoCurso;
 	
-	public void adquirir(Material material) throws AdquisicionException {
+	public void adquirir(Material material) throws AdquisicionException, LimiteMaximoGastoException {
+		if(material.costo(this)>this.limite) {
+			throw new LimiteMaximoGastoException("no puede adquirir el material "+material.getTitulo()+ " porque excede su limite de gasto sin facturarlo");
+		}
 		if(material.puedeAdquirir(this)) {
 			this.adquisiciones.add(new Adquisicion(material, LocalDateTime.now(), material.costo(this)));
 		}else throw new AdquisicionException("no se pudo adquirir el material" + material.getTitulo());

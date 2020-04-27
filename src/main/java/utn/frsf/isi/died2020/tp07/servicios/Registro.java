@@ -15,6 +15,7 @@ import utn.frsf.isi.died2020.tp07.modelo.Material;
 import utn.frsf.isi.died2020.tp07.modelo.Usuario;
 import utn.frsf.isi.died2020.tp07.modelo.Video;
 import utn.frsf.isi.died2020.tpo7.excepciones.AdquisicionException;
+import utn.frsf.isi.died2020.tpo7.excepciones.LimiteMaximoGastoException;
 
 public class Registro {
 	
@@ -96,7 +97,7 @@ public class Registro {
 		if(user.isPresent()) {
 			try {
 				user.get().adquirir(material);
-			} catch (AdquisicionException e) {
+			} catch (AdquisicionException | LimiteMaximoGastoException e) {
 				System.out.println("No se pudo adquirir, revise los datos. Detalle: "+e.getMessage());
 			}
 		}	
